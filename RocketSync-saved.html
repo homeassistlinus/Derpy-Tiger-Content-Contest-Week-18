@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moon Mission Control | Immersive Experience</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        space: {
+                            black: '#05070A',
+                            dark: '#0A0E14',
+                            deep: '#0D1117',
+                        },
+                        flare: '#FF6B00',
+                        nebula: '#00E5FF',
+                    },
+                    fontFamily: {
+                        display: ['Orbitron', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains+Mono', 'monospace'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'glow-pulse': 'glow 2s ease-in-out infinite alternate',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        glow: {
+                            '0%': { boxShadow: '0 0 5px rgba(0, 229, 255, 0.2)' },
+                            '100%': { boxShadow: '0 0 20px rgba(0, 229, 255, 0.6)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #05070A;
+            color: #E2E8F0;
+            overflow-x: hidden;
+        }
+
+        .glass-card {
+            background: rgba(13, 17, 23, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 229, 255, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(0, 229, 255, 0.4);
+            box-shadow: 0 0 25px rgba(0, 229, 255, 0.1);
+        }
+
+        .nebula-gradient {
+            background: radial-gradient(circle at top right, rgba(0, 229, 255, 0.05), transparent 40%),
+                        radial-gradient(circle at bottom left, rgba(255, 107, 0, 0.05), transparent 40%);
+        }
+
+        .scanline {
+            width: 100%;
+            height: 2px;
+            background: rgba(0, 229, 255, 0.1);
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            animation: scan 8s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
+
+        .video-glow {
+            filter: drop-shadow(0 0 15px rgba(0, 229, 255, 0.3));
+        }
+
+        .hero-video-container::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(45deg, #00E5FF, transparent, #FF6B00, transparent);
+            z-index: -1;
+            border-radius: 1.5rem;
+            opacity: 0.3;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.8s forwards ease-out;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+    </style>
+</head>
+<body class="font-body nebula-gradient min-h-screen selection:bg-nebula/30">
+
+    <!-- NAVIGATION -->
+    <nav class="fixed top-0 w-full z-50 px-6 py-4 flex justify-between items-center border-b border-white/5 bg-space-black/80 backdrop-blur-md">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-flare rounded-sm flex items-center justify-center rotate-45">
+                <div class="w-4 h-4 bg-space-black -rotate-45"></div>
+            </div>
+            <span class="font-display font-bold tracking-tighter text-xl">LUNAR<span class="text-nebula">OS</span></span>
+        </div>
+        
+        <div class="flex items-center gap-6">
+            <div class="hidden md:flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-nebula animate-pulse"></span>
+                <span class="font-mono text-xs uppercase tracking-widest text-nebula/80">Mission: Active</span>
+            </div>
+            <div class="h-8 w-px bg-white/10 hidden md:block"></div>
+            <div class="font-mono text-[10px] text-white/40 leading-none">
+                COORD: 28.5721° N<br>80.6480° W
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-24 pb-12 px-4 max-w-7xl mx-auto space-y-12">
+        
+        <!-- HERO SECTION -->
+        <section class="fade-in text-center space-y-8">
+            <div class="space-y-2">
+                <h2 class="font-mono text-nebula text-sm tracking-[0.4em] uppercase">Primary Visual Feed</h2>
+                <h1 class="font-display text-4xl md:text-6xl font-black tracking-tight uppercase">Moon Mission <span class="text-flare">Alpha</span></h1>
+            </div>
+
+            <div class="relative hero-video-container max-w-5xl mx-auto group">
+                <div class="absolute -inset-4 bg-nebula/5 blur-3xl rounded-full opacity-50 pointer-events-none"></div>
+                <div class="relative rounded-3xl overflow-hidden glass-card video-glow border-nebula/30 shadow-2xl shadow-nebula/10">
+                    <div class="scanline"></div>
+                    <!-- GENERATED VIDEO -->
+                    <video 
+                        src='https://opal.google/board/blobs/054026bf-d549-40f8-ab9a-c993dd794c79' 
+                        alt='Moon Mission Animation' 
+                        class="w-full aspect-video object-cover"
+                        controls 
+                        autoplay 
+                        muted 
+                        loop
+                    ></video>
+                    
+                    <!-- VIDEO OVERLAY UI -->
+                    <div class="absolute top-4 right-4 pointer-events-none">
+                        <div class="bg-black/40 backdrop-blur-sm border border-white/10 px-3 py-1 rounded-full flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                            <span class="font-mono text-[10px] uppercase">REC 4K</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BENTO BRIEFING SECTION -->
+        <section class="fade-in delay-1 space-y-6">
+            <div class="flex items-center gap-4">
+                <div class="h-px flex-1 bg-gradient-to-r from-transparent via-nebula/30 to-transparent"></div>
+                <h3 class="font-display text-lg tracking-widest text-nebula/60 uppercase">Mission Parameters</h3>
+                <div class="h-px flex-1 bg-gradient-to-r from-transparent via-nebula/30 to-transparent"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                
+                <!-- CHARACTER CARD -->
+                <div class="md:col-span-5 glass-card rounded-3xl p-6 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-100 transition-opacity">
+                        <svg class="w-8 h-8 text-nebula" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <label class="font-mono text-xs text-nebula/60 uppercase tracking-tighter flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 bg-nebula rounded-full"></span>
+                            Subject Profile
+                        </label>
+                        <div class="rounded-xl overflow-hidden border border-white/5 shadow-xl">
+                            <img src='https://opal.google/board/blobs/3eacae0d-4261-4bd4-994c-da5168e5d216' alt='Character Description' class="w-full h-64 object-cover grayscale hover:grayscale-0 transition-all duration-700" />
+                        </div>
+                        <div class="space-y-2">
+                            <h4 class="font-display text-xl">The Astronaut</h4>
+                            <p class="text-white/60 text-sm leading-relaxed">Advanced life-support systems integrated for lunar habitation. High-durability fiber-weave pressure suit with localized gravitational dampers.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STYLE / ENV CARD -->
+                <div class="md:col-span-7 glass-card rounded-3xl p-6 relative flex flex-col justify-between group overflow-hidden">
+                    <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-flare/10 rounded-full blur-3xl"></div>
+                    
+                    <div class="space-y-6 relative z-10">
+                        <div class="flex justify-between items-start">
+                            <div class="space-y-1">
+                                <label class="font-mono text-xs text-flare/80 uppercase tracking-tighter flex items-center gap-2">
+                                    <span class="w-1.5 h-1.5 bg-flare rounded-full"></span>
+                                    Environment Matrix
+                                </label>
+                                <h4 class="font-display text-2xl">科幻風 <span class="text-white/40 text-sm font-mono tracking-normal ml-2">SCI-FI AESTHETIC</span></h4>
+                            </div>
+                            <svg class="w-8 h-8 text-flare opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="aspect-video rounded-xl overflow-hidden border border-white/5 group-hover:border-flare/40 transition-colors">
+                                <img src='https://opal.google/board/blobs/3eec313e-9298-485f-a129-3e723db56318' alt='Style Sample 1' class="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-1000" />
+                            </div>
+                            <div class="aspect-video rounded-xl overflow-hidden border border-white/5 group-hover:border-flare/40 transition-colors">
+                                <img src='https://opal.google/board/blobs/57f9581f-e752-497c-8290-ce1e293a51a8' alt='Style Sample 2' class="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-1000" />
+                            </div>
+                        </div>
+
+                        <div class="bg-white/5 p-4 rounded-xl border-l-2 border-flare">
+                            <p class="font-mono text-[11px] text-white/70 leading-relaxed uppercase tracking-wide">
+                                Data: Visual language optimized for high-contrast lunar landscapes. Neon cyan accents juxtaposed against obsidian terrain. Deep space shadows rendered with ray-traced precision.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- CTA / METADATA -->
+        <section class="fade-in delay-2 flex flex-col md:flex-row gap-6 items-center justify-between py-12 border-t border-white/5">
+            <div class="flex flex-col gap-2">
+                <span class="font-mono text-xs text-white/30">TRANSMISSION ID: 88-LUNA-ALPHA</span>
+                <span class="font-mono text-xs text-white/30">TIMESTAMP: 2024-11-20T14:48:02Z</span>
+            </div>
+            
+            <button onclick="window.location.reload()" class="group relative px-8 py-4 bg-transparent border border-nebula text-nebula font-display text-sm tracking-widest uppercase overflow-hidden transition-all hover:text-space-black">
+                <div class="absolute inset-0 bg-nebula translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                <span class="relative z-10 flex items-center gap-3">
+                    Re-initialize Mission
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                </span>
+            </button>
+        </section>
+    </main>
+
+    <!-- UI ACCENTS -->
+    <div class="fixed bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-nebula to-transparent opacity-20"></div>
+    <div class="fixed top-24 left-6 hidden xl:flex flex-col gap-8">
+        <div class="h-32 w-px bg-gradient-to-b from-transparent via-white/20 to-transparent"></div>
+        <div class="font-mono text-[10px] text-white/20 rotate-180 [writing-mode:vertical-lr]">SYSTEM_DIAGNOSTICS_STABLE</div>
+    </div>
+    <div class="fixed top-24 right-6 hidden xl:flex flex-col gap-8">
+        <div class="font-mono text-[10px] text-white/20 [writing-mode:vertical-lr]">FUEL_RESERVES_OPTIMAL</div>
+        <div class="h-32 w-px bg-gradient-to-b from-transparent via-white/20 to-transparent"></div>
+    </div>
+
+    <script>
+        // Smooth entrance for page elements
+        document.addEventListener('DOMContentLoaded', () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('opacity-100');
+                    }
+                });
+            });
+
+            document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+        });
+    </script>
+</body>
+</html>
